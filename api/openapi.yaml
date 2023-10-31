@@ -1,0 +1,662 @@
+openapi: 3.0.2
+info:
+  title: pleasant password server
+  version: 1.0.0
+servers:
+- url: /
+security:
+- {}
+tags:
+- description: Used for authentication
+  name: Authentication
+- description: ""
+  name: Token
+- description: ""
+  name: Bearer
+paths:
+  /api/v6/rest/entries/{id}:
+    get:
+      operationId: GetV6CredentialsByID
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v6CredentialResult'
+          description: Returns a Credential
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not found
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: not found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericError'
+          description: Internal server error
+      security:
+      - Bearer_token: []
+      summary: get_entry
+  /api/v6/rest/folders/{id}:
+    get:
+      operationId: GetV6FoldersByID
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v6CredentialGroupOutput'
+          description: Returns a Credential
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: not found
+      security:
+      - Bearer_token: []
+  /api/v6/rest/search:
+    post:
+      operationId: PostV6Search
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/v6SearchInput'
+        description: Searches
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v6SearchOutput'
+          description: Returns one of Credentials or Groups
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: not found
+      security:
+      - Bearer_token: []
+  /api/v6/rest/getserverinfo:
+    get:
+      operationId: GetV6ServerInfo
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v6ServerInfoOutput'
+          description: response
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: not found
+      security:
+      - Bearer_token: []
+  /OAuth2/Token:
+    post:
+      operationId: PostOauthToken
+      parameters:
+      - description: Only Required if user is Oauth
+        examples:
+          OTP:
+            value: "15686"
+        explode: false
+        in: header
+        name: X-Pleasant-OTP
+        required: false
+        schema:
+          type: string
+        style: simple
+      - description: Only required if user is Oauth
+        examples:
+          Provider:
+            value: authenticator-app
+        explode: false
+        in: header
+        name: X-Pleasant-OTP-Provider
+        required: false
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            examples:
+              login body:
+                value:
+                - grant_type: nn2
+                  username: hh94
+                  password: u
+            schema:
+              $ref: '#/components/schemas/Oauth2TokenInput'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Oauth2TokenOutput'
+          description: reponse
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericError'
+          description: generic error message
+      tags:
+      - Authentication
+components:
+  responses:
+    NotFoundError:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NotFoundError'
+      description: not found
+    Generic_Error:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GenericError'
+      description: generic error message
+  schemas:
+    Oauth2TokenOutput:
+      description: ""
+      example:
+      - access_token: '"D0_brcMRk6n-YCT_LeBwJeX2k1EfmeCPjyaU3zyH96Q2TLv45sDIqPSadf4cB7teZ0T3nufPVDd8U90tCGhDKTey6gHcJLVDoSrugkx57wyNo6Vfnm_3IDQ1ayrJ1EZiULvpqDYD_kU4jL0Uurp7nrN-VU_prJhZyXayepPVWGZSmfj-ctn1wkfOOj9_V29609H5PzIZOOPxH2kerrNrPAH0PQ59H56QVJDys7l94uxVwoHUTOL5hQHFQKAGJE2plB30TRDOpPezGArLxtU9ajpKBsxIn0lP58--a5kjMT3rHUuvJ5tgOFimcB6uLP8yt1CGCZ__OoNYW4HFtbOhRNRuOVlVRSEs_do18DrLMBrHYWQn6E5zdduKHqa6GlA38dbHgwYXe12tJNQvk8MBRBTr46azNEQ0iYJjtRY1L3hcrje0QiulENt8P-EqPuMStX6bspPlmZ_OIZOJ0CME5Rq8peSPnwCf4Y9DT4NX993C9YtiH69_Duu3_UIpN08KsHgdttk84XRiiUkEf0gl9_yKPAW78lYWIfvW7cnit_quUL2mCrbQ2iewf4nQ19eMSsimLS0hHAirvP6teJOhzdaN2p2LBLuxV84rAMZPp8IrYQeoFLbAgQLjnA0F53LIrcymcL6TfoxZFNYVfJMYWeGfZMjNq7vDC1bmLjVe68e4CUo1tsqgWERaHtMrUuwdMUSbdttIh-9aZ6nael5FtiDFM7ijco-2t9613R0jd8XkLllDHS-uyQK0T7gP2ZcqoGWLorTRRrZPXKgomIa6DiZ37k9zvhEX5nKJC2DMZOuposfO8ia_G88XA0bGDuofbLSiv8pdIGCQavNTzhlAFFHzRfA2aC_TNCwCSAa55eVNAvWkBQZ6WawRV67HW09BZfxPlh6-jAkqeLNTNa1rCS"'
+        token_type: bearer
+        expires_in: "28799"
+      properties:
+        access_token:
+          example: '"D0_brcMRk6n-YCT_LeBwJeX2k1EfmeCPjyaU3zyH96Q2TLv45sDIqPSadf4cB7teZ0T3nufPVDd8U90tCGhDKTey6gHcJLVDoSrugkx57wyNo6Vfnm_3IDQ1ayrJ1EZiULvpqDYD_kU4jL0Uurp7nrN-VU_prJhZyXayepPVWGZSmfj-ctn1wkfOOj9_V29609H5PzIZOOPxH2kerrNrPAH0PQ59H56QVJDys7l94uxVwoHUTOL5hQHFQKAGJE2plB30TRDOpPezGArLxtU9ajpKBsxIn0lP58--a5kjMT3rHUuvJ5tgOFimcB6uLP8yt1CGCZ__OoNYW4HFtbOhRNRuOVlVRSEs_do18DrLMBrHYWQn6E5zdduKHqa6GlA38dbHgwYXe12tJNQvk8MBRBTr46azNEQ0iYJjtRY1L3hcrje0QiulENt8P-EqPuMStX6bspPlmZ_OIZOJ0CME5Rq8peSPnwCf4Y9DT4NX993C9YtiH69_Duu3_UIpN08KsHgdttk84XRiiUkEf0gl9_yKPAW78lYWIfvW7cnit_quUL2mCrbQ2iewf4nQ19eMSsimLS0hHAirvP6teJOhzdaN2p2LBLuxV84rAMZPp8IrYQeoFLbAgQLjnA0F53LIrcymcL6TfoxZFNYVfJMYWeGfZMjNq7vDC1bmLjVe68e4CUo1tsqgWERaHtMrUuwdMUSbdttIh-9aZ6nael5FtiDFM7ijco-2t9613R0jd8XkLllDHS-uyQK0T7gP2ZcqoGWLorTRRrZPXKgomIa6DiZ37k9zvhEX5nKJC2DMZOuposfO8ia_G88XA0bGDuofbLSiv8pdIGCQavNTzhlAFFHzRfA2aC_TNCwCSAa55eVNAvWkBQZ6WawRV67HW09BZfxPlh6-jAkqeLNTNa1rCS"'
+          type: string
+        token_type:
+          example: bearer
+          type: string
+        expires_in:
+          example: 28799
+          format: int32
+          type: integer
+      title: Root Type for Oauth2_Token_Response
+      type: object
+    NotFoundError:
+      description: ""
+      example:
+        error_message: Cannot find the requested entry.
+      properties:
+        error_message:
+          type: string
+      title: Root Type for NotFoundError
+      type: object
+    GenericError:
+      description: ""
+      example:
+        Message: No HTTP resource was found that matches the request URI 'https://foo.bar/api/v5/rest/GetServerInfo3'.
+      properties:
+        Message:
+          type: string
+      title: Root Type for APiEndpointNotFoundError
+      type: object
+    v6AttachmentResult:
+      description: ""
+      example:
+        CredentialObjectId: f2e640fa-72aa-49e3-b7ff-5376311fe8f6
+        FileName: sample.txt
+        FileData: UllYNg==
+        FileSize: 4
+      properties:
+        CredentialObjectId:
+          type: string
+        FileName:
+          type: string
+        FileData:
+          format: byte
+          type: string
+        FileSize:
+          format: int32
+          readOnly: true
+          type: integer
+      title: Root Type for AttachmentResult
+      type: object
+    v6CommentPromptResult:
+      description: ""
+      example:
+        AskForCommentOnViewPassword: false
+        AskForCommentOnViewOffline: false
+        AskForCommentOnModifyEntries: false
+        AskForCommentOnMoveEntries: false
+        AskForCommentOnMoveFolders: false
+        AskForCommentOnModifyFolders: false
+      properties:
+        AskForCommentOnViewPassword:
+          readOnly: true
+          type: boolean
+        AskForCommentOnViewOffline:
+          readOnly: true
+          type: boolean
+        AskForCommentOnModifyEntries:
+          readOnly: true
+          type: boolean
+        AskForCommentOnMoveEntries:
+          readOnly: true
+          type: boolean
+        AskForCommentOnMoveFolders:
+          readOnly: true
+          type: boolean
+        AskForCommentOnModifyFolders:
+          readOnly: true
+          type: boolean
+      title: Root Type for CommentPromptResult
+      type: object
+    v6CredentialGroupOutput:
+      description: ""
+      example:
+        CustomUserFields: {}
+        CustomApplicationFields:
+          IconId: "48"
+        Children: []
+        Credentials:
+        - CustomUserFields: {}
+          CustomApplicationFields: {}
+          Attachments: []
+          Tags: []
+          HasModifyEntriesAccess: true
+          HasViewEntryContentsAccess: true
+          HasViewEntryPasswordAccess: true
+          HasViewTOTPAccess: true
+          HasModifyTOTPAccess: true
+          CommentPrompts:
+            AskForCommentOnViewPassword: false
+            AskForCommentOnViewOffline: false
+            AskForCommentOnModifyEntries: false
+            AskForCommentOnMoveEntries: false
+            AskForCommentOnMoveFolders: false
+            AskForCommentOnModifyFolders: false
+          Id: 83ba66d6-9470-4bb8-b690-0ef04ae0cc00
+          Name: postgressql
+          Username: ""
+          Url: ""
+          Notes: ""
+          GroupId: 0d592c23-799c-449c-b4af-e367c5fae80b
+          Created: 2023-10-04T10:36:34+02:00
+          Modified: 2023-10-04T10:36:34+02:00
+          TOTPDigits: 6
+          TOTPPeriod: 30
+        - CustomUserFields: {}
+          CustomApplicationFields:
+            IconId: "0"
+          Attachments: []
+          Tags:
+          - Name: ""
+          HasModifyEntriesAccess: true
+          HasViewEntryContentsAccess: true
+          HasViewEntryPasswordAccess: true
+          HasViewTOTPAccess: true
+          HasModifyTOTPAccess: true
+          CommentPrompts:
+            AskForCommentOnViewPassword: false
+            AskForCommentOnViewOffline: false
+            AskForCommentOnModifyEntries: false
+            AskForCommentOnMoveEntries: false
+            AskForCommentOnMoveFolders: false
+            AskForCommentOnModifyFolders: false
+          Id: 60ba37f3-4573-4f27-ae83-837a982d9fab
+          Name: ssh
+          Username: ""
+          Url: ""
+          Notes: ""
+          GroupId: 0d592c23-799c-449c-b4af-e367c5fae80b
+          Created: 2023-08-16T10:53:26+02:00
+          Modified: 2023-08-16T10:53:26+02:00
+          TOTPIssuer: ""
+          TOTPDigits: 6
+          TOTPPeriod: 30
+        Tags: []
+        HasModifyEntriesAccess: true
+        HasViewEntryContentsAccess: true
+        CommentPrompts:
+          AskForCommentOnViewPassword: false
+          AskForCommentOnViewOffline: false
+          AskForCommentOnModifyEntries: false
+          AskForCommentOnMoveEntries: false
+          AskForCommentOnMoveFolders: false
+          AskForCommentOnModifyFolders: false
+        Id: 0d592c23-799c-449c-b4af-e367c5fae80b
+        Name: ""
+        ParentId: 9fcb85ef-e156-4a16-ae53-0420a40d066d
+        Notes: ""
+        Created: 2023-08-16T10:53:25+02:00
+        Modified: 2023-08-16T14:40:17+02:00
+      properties:
+        CustomUserFields:
+          description: ""
+          type: object
+        CustomApplicationFields:
+          description: ""
+          type: object
+        Children:
+          items:
+            $ref: '#/components/schemas/v6CredentialGroupOutput'
+          type: array
+        Credentials:
+          items:
+            $ref: '#/components/schemas/v6CredentialResult'
+          readOnly: false
+          type: array
+        Tags:
+          items: {}
+          type: array
+        HasModifyEntriesAccess:
+          type: boolean
+        HasViewEntryContentsAccess:
+          type: boolean
+        CommentPrompts:
+          $ref: '#/components/schemas/v6CommentPromptResult'
+        Id:
+          type: string
+        Name:
+          type: string
+        ParentId:
+          type: string
+        Notes:
+          type: string
+        Created:
+          format: date-time
+          type: string
+        Modified:
+          format: date-time
+          type: string
+        Expires:
+          type: string
+      title: Root Type for CredentialGroupOutput
+      type: object
+    v6CredentialGroupSearchResult:
+      description: ""
+      example:
+        Id: 3df4bab8-9d86-4101-82bf-6fee12052d79
+        Name: find me folder
+        FullPath: Root/find me folder/
+      properties:
+        Id:
+          type: string
+        Name:
+          type: string
+        FullPath:
+          type: string
+      title: Root Type for CredentialGroupSearchResult
+      type: object
+    v6CredentialResult:
+      description: ""
+      example:
+        CustomUserFields: {}
+        CustomApplicationFields: {}
+        Attachments: []
+        Tags: []
+        HasModifyEntriesAccess: true
+        HasViewEntryContentsAccess: true
+        HasViewEntryPasswordAccess: true
+        HasViewTOTPAccess: true
+        HasModifyTOTPAccess: true
+        CommentPrompts:
+          AskForCommentOnViewPassword: false
+          AskForCommentOnViewOffline: false
+          AskForCommentOnModifyEntries: false
+          AskForCommentOnMoveEntries: false
+          AskForCommentOnMoveFolders: false
+          AskForCommentOnModifyFolders: false
+        Id: 83ba66d6-9470-4bb8-b690-0ef04ae0cc00
+        Name: ""
+        Username: ""
+        Url: ""
+        Notes: ""
+        GroupId: 0d592c23-799c-449c-b4af-e367c5fae80b
+        Created: 2023-10-04T10:36:34+02:00
+        Modified: 2023-10-04T10:36:34+02:00
+        TOTPDigits: 6
+        TOTPPeriod: 30
+      properties:
+        CustomUserFields:
+          description: ""
+          type: object
+        CustomApplicationFields:
+          description: ""
+          type: object
+        Attachments:
+          items:
+            $ref: '#/components/schemas/v6AttachmentResult'
+          type: array
+        Tags:
+          items:
+            $ref: '#/components/schemas/v6TagResult'
+          type: array
+        HasModifyEntriesAccess:
+          type: boolean
+        HasViewEntryContentsAccess:
+          type: boolean
+        HasViewEntryPasswordAccess:
+          type: boolean
+        HasViewTOTPAccess:
+          type: boolean
+        HasModifyTOTPAccess:
+          type: boolean
+        CommentPrompts:
+          $ref: '#/components/schemas/v6CommentPromptResult'
+        Id:
+          type: string
+        Name:
+          type: string
+        Username:
+          type: string
+        Password:
+          type: string
+        Url:
+          type: string
+        Notes:
+          type: string
+        GroupId:
+          type: string
+        Created:
+          format: date-time
+          type: string
+        Modified:
+          format: date-time
+          type: string
+        Expires:
+          type: string
+        TOTPIssuer:
+          type: string
+        TOTPSecret:
+          type: string
+        TOTPDigits:
+          format: int32
+          type: integer
+        TOTPPeriod:
+          format: int32
+          type: integer
+      title: Root Type for CredentialResult
+      type: object
+    v6CredentialSearchResult:
+      description: ""
+      example:
+        Id: 79bc70d9-dfa8-430b-9f0c-0247b42bc6ce
+        Name: find me
+        Username: ""
+        Url: username
+        Notes: ""
+        GroupId: 34e863ca-4578-4704-96bf-a49500b3e2c5
+        Path: Root/find me
+      properties:
+        Id:
+          type: string
+        Name:
+          type: string
+        Username:
+          type: string
+        Url:
+          type: string
+        Notes:
+          type: string
+        GroupId:
+          type: string
+        Path:
+          type: string
+      required:
+      - GroupId
+      title: Root Type for CredentialGroupSearchResult
+      type: object
+    v6CustomApplicationFieldsResult:
+      description: ""
+      type: object
+    v6CustomUserFieldsResult:
+      description: ""
+      type: object
+    v6SearchInput:
+      description: ""
+      example:
+        Search: find this
+      properties:
+        Search:
+          type: string
+      title: Root Type for SearchInput
+      type: object
+    v6TagResult:
+      description: ""
+      example:
+        Name: Example Tag
+      properties:
+        Name:
+          readOnly: true
+          type: string
+      title: Root Type for TagResult
+      type: object
+    v6SearchOutput:
+      description: ""
+      example:
+        Credentials:
+        - Id: 79bc70d9-dfa8-430b-9f0c-0247b42bc6ce
+          Name: find me
+          Username: ""
+          Url: username
+          Notes: ""
+          GroupId: 34e863ca-4578-4704-96bf-a49500b3e2c5
+          Path: Root/find me
+        - Id: abe79d97-d135-44a1-a554-31b55d586b24
+          Name: find me 2
+          Username: ""
+          Url: ""
+          Notes: ""
+          GroupId: 34e863ca-4578-4704-96bf-a49500b3e2c5
+          Path: Root/find me 2
+        Groups:
+        - Id: 3df4bab8-9d86-4101-82bf-6fee12052d79
+          Name: find me folder
+          FullPath: Root/find me folder/
+      properties:
+        Credentials:
+          items:
+            $ref: '#/components/schemas/v6CredentialSearchResult'
+          type: array
+        Groups:
+          items:
+            $ref: '#/components/schemas/v6CredentialGroupSearchResult'
+          type: array
+      title: Root Type for SearchOutput
+      type: object
+    v6ServerInfoOutput:
+      description: ""
+      example:
+        ServerVersion: 8.0.8.0
+        NetVersion: 4.0.30319.42000
+        OsVersion: Microsoft Windows NT 6.2.9200.0
+        PortSettings: ""
+        DnsInformation: "\r\nAdapter: vmxnet3 Ethernet Adapter\r\n    Suffix: \r\n\
+          \    Enabled: False\r\n    Dynamically Configured: True\r\n    IpAddresses:\
+          \ \r\n      1.1.1.1\r\n      208.67.222.222\r\n\r\nAdapter: Software Loopback\
+          \ Interface 1\r\n    Suffix: \r\n    Enabled: False\r\n    Dynamically Configured:\
+          \ True\r\n    IpAddresses: \r\n      fec0:0:0:ffff::1%1\r\n      fec0:0:0:ffff::2%1\r\
+          \n      fec0:0:0:ffff::3%1\r\n"
+      properties:
+        ServerVersion:
+          type: string
+        NetVersion:
+          type: string
+        OsVersion:
+          type: string
+        PortSettings:
+          type: string
+        DnsInformation:
+          type: string
+        Ping:
+          type: string
+      title: Root Type for api_v5_rest_GetServerInfo_response
+      type: object
+    Oauth2TokenInput:
+      description: ""
+      example:
+        grant_type: password
+        username: user
+        password: pass
+      properties:
+        grant_type:
+          exclusiveMaximum: false
+          exclusiveMinimum: false
+          readOnly: false
+          type: string
+          writeOnly: false
+        username:
+          type: string
+        password:
+          type: string
+      required:
+      - grant_type
+      - password
+      - username
+      title: Root Type for OAuth2_Token
+      type: object
+    WithDescriptionError:
+      description: '                '
+      example:
+        error: invalid_grant
+        error_description: The username or password is incorrect.
+      properties:
+        error:
+          type: string
+        error_description:
+          type: string
+      title: Root Type for error_description
+      type: object
+  securitySchemes:
+    Bearer_token:
+      description: Login using /OAuth2/Token
+      scheme: bearer
+      type: http
