@@ -1,0 +1,1 @@
+openapi-generator generate -i ./api/openapi.yaml -g go  --global-property skipFormModel=false --git-user-id theochita --git-repo-id go-pleasant-password
