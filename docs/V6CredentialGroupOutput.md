@@ -8,7 +8,7 @@ Name | Type | Description | Notes
 **CustomApplicationFields** | Pointer to **map[string]interface{}** |  | [optional] 
 **Children** | Pointer to [**[]V6CredentialGroupOutput**](V6CredentialGroupOutput.md) |  | [optional] 
 **Credentials** | Pointer to [**[]V6CredentialResult**](V6CredentialResult.md) |  | [optional] 
-**Tags** | Pointer to **[]interface{}** |  | [optional] 
+**Tags** | Pointer to [**[]V6TagResult**](V6TagResult.md) |  | [optional] 
 **HasModifyEntriesAccess** | Pointer to **bool** |  | [optional] 
 **HasViewEntryContentsAccess** | Pointer to **bool** |  | [optional] 
 **CommentPrompts** | Pointer to [**V6CommentPromptResult**](V6CommentPromptResult.md) |  | [optional] 
@@ -141,20 +141,20 @@ HasCredentials returns a boolean if a field has been set.
 
 ### GetTags
 
-`func (o *V6CredentialGroupOutput) GetTags() []interface{}`
+`func (o *V6CredentialGroupOutput) GetTags() []V6TagResult`
 
 GetTags returns the Tags field if non-nil, zero value otherwise.
 
 ### GetTagsOk
 
-`func (o *V6CredentialGroupOutput) GetTagsOk() (*[]interface{}, bool)`
+`func (o *V6CredentialGroupOutput) GetTagsOk() (*[]V6TagResult, bool)`
 
 GetTagsOk returns a tuple with the Tags field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetTags
 
-`func (o *V6CredentialGroupOutput) SetTags(v []interface{})`
+`func (o *V6CredentialGroupOutput) SetTags(v []V6TagResult)`
 
 SetTags sets Tags field to given value.
 
