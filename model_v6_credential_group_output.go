@@ -26,7 +26,7 @@ type V6CredentialGroupOutput struct {
 	CustomApplicationFields map[string]interface{} `json:"CustomApplicationFields,omitempty"`
 	Children []V6CredentialGroupOutput `json:"Children,omitempty"`
 	Credentials []V6CredentialResult `json:"Credentials,omitempty"`
-	Tags []interface{} `json:"Tags,omitempty"`
+	Tags []V6TagResult `json:"Tags,omitempty"`
 	HasModifyEntriesAccess *bool `json:"HasModifyEntriesAccess,omitempty"`
 	HasViewEntryContentsAccess *bool `json:"HasViewEntryContentsAccess,omitempty"`
 	CommentPrompts *V6CommentPromptResult `json:"CommentPrompts,omitempty"`
@@ -185,9 +185,9 @@ func (o *V6CredentialGroupOutput) SetCredentials(v []V6CredentialResult) {
 }
 
 // GetTags returns the Tags field value if set, zero value otherwise.
-func (o *V6CredentialGroupOutput) GetTags() []interface{} {
+func (o *V6CredentialGroupOutput) GetTags() []V6TagResult {
 	if o == nil || IsNil(o.Tags) {
-		var ret []interface{}
+		var ret []V6TagResult
 		return ret
 	}
 	return o.Tags
@@ -195,7 +195,7 @@ func (o *V6CredentialGroupOutput) GetTags() []interface{} {
 
 // GetTagsOk returns a tuple with the Tags field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *V6CredentialGroupOutput) GetTagsOk() ([]interface{}, bool) {
+func (o *V6CredentialGroupOutput) GetTagsOk() ([]V6TagResult, bool) {
 	if o == nil || IsNil(o.Tags) {
 		return nil, false
 	}
@@ -211,8 +211,8 @@ func (o *V6CredentialGroupOutput) HasTags() bool {
 	return false
 }
 
-// SetTags gets a reference to the given []interface{} and assigns it to the Tags field.
-func (o *V6CredentialGroupOutput) SetTags(v []interface{}) {
+// SetTags gets a reference to the given []V6TagResult and assigns it to the Tags field.
+func (o *V6CredentialGroupOutput) SetTags(v []V6TagResult) {
 	o.Tags = v
 }
 
