@@ -1,5 +1,4 @@
 .gitignore
-.openapi-generator-ignore
 .travis.yml
 README.md
 api/openapi.yaml
@@ -9,12 +8,14 @@ client.go
 configuration.go
 docs/AuthenticationAPI.md
 docs/DefaultAPI.md
+docs/DeleteAction.md
 docs/GenericError.md
 docs/NotFoundError.md
 docs/Oauth2TokenInput.md
 docs/Oauth2TokenOutput.md
 docs/V6AttachmentResult.md
 docs/V6CommentPromptResult.md
+docs/V6CredentialGroupInput.md
 docs/V6CredentialGroupOutput.md
 docs/V6CredentialGroupSearchResult.md
 docs/V6CredentialResult.md
@@ -27,12 +28,14 @@ docs/WithDescriptionError.md
 git_push.sh
 go.mod
 go.sum
+model_delete_action.go
 model_generic_error.go
 model_not_found_error.go
 model_oauth2_token_input.go
 model_oauth2_token_output.go
 model_v6_attachment_result.go
 model_v6_comment_prompt_result.go
+model_v6_credential_group_input.go
 model_v6_credential_group_output.go
 model_v6_credential_group_search_result.go
 model_v6_credential_result.go
@@ -43,6 +46,4 @@ model_v6_server_info_output.go
 model_v6_tag_result.go
 model_with_description_error.go
 response.go
-test/api_authentication_test.go
-test/api_default_test.go
 utils.go

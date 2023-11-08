@@ -155,7 +155,7 @@ func (a *AuthenticationAPIService) PostOauthTokenExecute(r ApiPostOauthTokenRequ
 			error: localVarHTTPResponse.Status,
 		}
 		if localVarHTTPResponse.StatusCode == 400 {
-			var v GenericError
+			var v WithDescriptionError
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 			if err != nil {
 				newErr.error = err.Error()

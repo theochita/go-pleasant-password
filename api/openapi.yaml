@@ -54,6 +54,25 @@ paths:
       - Bearer_token: []
       summary: get_entry
   /api/v6/rest/folders/{id}:
+    delete:
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Delete_Action'
+        description: Delete or archive  folder
+        required: true
+      responses:
+        "204":
+          description: Delete or Archive successful
     get:
       operationId: GetV6FoldersByID
       parameters:
@@ -171,10 +190,52 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GenericError'
-          description: generic error message
+                $ref: '#/components/schemas/WithDescriptionError'
+          description: Error with description
       tags:
       - Authentication
+  /api/v6/rest/folders:
+    get:
+      description: Get all folders visable to the user
+      operationId: GetV6Folders
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v6CredentialGroupOutput'
+          description: Returns all folders inside the root folder.
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: not found
+    post:
+      operationId: PostV6Folders
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/v6CredentialGroupOutput'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              examples:
+                "200 OK":
+                  value: '"a5bc41a3-0aa5-4e6a-83f4-ae61063e875c"'
+          description: Returns only raw guid string
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: not found
+      security:
+      - Bearer_token: []
+      summary: Create New Folder
 components:
   responses:
     NotFoundError:
@@ -189,6 +250,12 @@ components:
           schema:
             $ref: '#/components/schemas/GenericError'
       description: generic error message
+    WithDescriptionError:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/WithDescriptionError'
+      description: ""
   schemas:
     Oauth2TokenOutput:
       description: ""
@@ -278,128 +345,6 @@ components:
           type: boolean
       title: Root Type for CommentPromptResult
       type: object
-    v6CredentialGroupOutput:
-      description: ""
-      example:
-        CustomUserFields: {}
-        CustomApplicationFields:
-          IconId: "48"
-        Children: []
-        Credentials:
-        - CustomUserFields: {}
-          CustomApplicationFields: {}
-          Attachments: []
-          Tags: []
-          HasModifyEntriesAccess: true
-          HasViewEntryContentsAccess: true
-          HasViewEntryPasswordAccess: true
-          HasViewTOTPAccess: true
-          HasModifyTOTPAccess: true
-          CommentPrompts:
-            AskForCommentOnViewPassword: false
-            AskForCommentOnViewOffline: false
-            AskForCommentOnModifyEntries: false
-            AskForCommentOnMoveEntries: false
-            AskForCommentOnMoveFolders: false
-            AskForCommentOnModifyFolders: false
-          Id: 83ba66d6-9470-4bb8-b690-0ef04ae0cc00
-          Name: postgressql
-          Username: ""
-          Url: ""
-          Notes: ""
-          GroupId: 0d592c23-799c-449c-b4af-e367c5fae80b
-          Created: 2023-10-04T10:36:34+02:00
-          Modified: 2023-10-04T10:36:34+02:00
-          TOTPDigits: 6
-          TOTPPeriod: 30
-        - CustomUserFields: {}
-          CustomApplicationFields:
-            IconId: "0"
-          Attachments: []
-          Tags:
-          - Name: ""
-          HasModifyEntriesAccess: true
-          HasViewEntryContentsAccess: true
-          HasViewEntryPasswordAccess: true
-          HasViewTOTPAccess: true
-          HasModifyTOTPAccess: true
-          CommentPrompts:
-            AskForCommentOnViewPassword: false
-            AskForCommentOnViewOffline: false
-            AskForCommentOnModifyEntries: false
-            AskForCommentOnMoveEntries: false
-            AskForCommentOnMoveFolders: false
-            AskForCommentOnModifyFolders: false
-          Id: 60ba37f3-4573-4f27-ae83-837a982d9fab
-          Name: ssh
-          Username: ""
-          Url: ""
-          Notes: ""
-          GroupId: 0d592c23-799c-449c-b4af-e367c5fae80b
-          Created: 2023-08-16T10:53:26+02:00
-          Modified: 2023-08-16T10:53:26+02:00
-          TOTPIssuer: ""
-          TOTPDigits: 6
-          TOTPPeriod: 30
-        Tags: []
-        HasModifyEntriesAccess: true
-        HasViewEntryContentsAccess: true
-        CommentPrompts:
-          AskForCommentOnViewPassword: false
-          AskForCommentOnViewOffline: false
-          AskForCommentOnModifyEntries: false
-          AskForCommentOnMoveEntries: false
-          AskForCommentOnMoveFolders: false
-          AskForCommentOnModifyFolders: false
-        Id: 0d592c23-799c-449c-b4af-e367c5fae80b
-        Name: ""
-        ParentId: 9fcb85ef-e156-4a16-ae53-0420a40d066d
-        Notes: ""
-        Created: 2023-08-16T10:53:25+02:00
-        Modified: 2023-08-16T14:40:17+02:00
-      properties:
-        CustomUserFields:
-          description: ""
-          type: object
-        CustomApplicationFields:
-          description: ""
-          type: object
-        Children:
-          items:
-            $ref: '#/components/schemas/v6CredentialGroupOutput'
-          type: array
-        Credentials:
-          items:
-            $ref: '#/components/schemas/v6CredentialResult'
-          readOnly: false
-          type: array
-        Tags:
-          items: {}
-          type: array
-        HasModifyEntriesAccess:
-          type: boolean
-        HasViewEntryContentsAccess:
-          type: boolean
-        CommentPrompts:
-          $ref: '#/components/schemas/v6CommentPromptResult'
-        Id:
-          type: string
-        Name:
-          type: string
-        ParentId:
-          type: string
-        Notes:
-          type: string
-        Created:
-          format: date-time
-          type: string
-        Modified:
-          format: date-time
-          type: string
-        Expires:
-          type: string
-      title: Root Type for CredentialGroupOutput
-      type: object
     v6CredentialGroupSearchResult:
       description: ""
       example:
@@ -440,8 +385,8 @@ components:
         Url: ""
         Notes: ""
         GroupId: 0d592c23-799c-449c-b4af-e367c5fae80b
-        Created: 2023-10-04T10:36:34+02:00
-        Modified: 2023-10-04T10:36:34+02:00
+        Created: 2023-10-04T08:36:34.000Z
+        Modified: 2023-10-04T08:36:34.000Z
         TOTPDigits: 6
         TOTPPeriod: 30
       properties:
@@ -654,6 +599,243 @@ components:
         error_description:
           type: string
       title: Root Type for error_description
+      type: object
+    v6CredentialGroupOutput:
+      description: ""
+      example:
+        CustomUserFields: {}
+        CustomApplicationFields:
+          IconId: "48"
+        Children: []
+        Credentials:
+        - CustomUserFields: {}
+          CustomApplicationFields: {}
+          Attachments: []
+          Tags: []
+          HasModifyEntriesAccess: true
+          HasViewEntryContentsAccess: true
+          HasViewEntryPasswordAccess: true
+          HasViewTOTPAccess: true
+          HasModifyTOTPAccess: true
+          CommentPrompts:
+            AskForCommentOnViewPassword: false
+            AskForCommentOnViewOffline: false
+            AskForCommentOnModifyEntries: false
+            AskForCommentOnMoveEntries: false
+            AskForCommentOnMoveFolders: false
+            AskForCommentOnModifyFolders: false
+          Id: 83ba66d6-9470-4bb8-b690-0ef04ae0cc00
+          Name: postgressql
+          Username: ""
+          Url: ""
+          Notes: ""
+          GroupId: 0d592c23-799c-449c-b4af-e367c5fae80b
+          Created: 2023-10-04T08:36:34.000Z
+          Modified: 2023-10-04T08:36:34.000Z
+          TOTPDigits: 6
+          TOTPPeriod: 30
+        - CustomUserFields: {}
+          CustomApplicationFields:
+            IconId: "0"
+          Attachments: []
+          Tags:
+          - Name: ""
+          HasModifyEntriesAccess: true
+          HasViewEntryContentsAccess: true
+          HasViewEntryPasswordAccess: true
+          HasViewTOTPAccess: true
+          HasModifyTOTPAccess: true
+          CommentPrompts:
+            AskForCommentOnViewPassword: false
+            AskForCommentOnViewOffline: false
+            AskForCommentOnModifyEntries: false
+            AskForCommentOnMoveEntries: false
+            AskForCommentOnMoveFolders: false
+            AskForCommentOnModifyFolders: false
+          Id: 60ba37f3-4573-4f27-ae83-837a982d9fab
+          Name: ssh
+          Username: ""
+          Url: ""
+          Notes: ""
+          GroupId: 0d592c23-799c-449c-b4af-e367c5fae80b
+          Created: 2023-08-16T08:53:26.000Z
+          Modified: 2023-08-16T08:53:26.000Z
+          TOTPIssuer: ""
+          TOTPDigits: 6
+          TOTPPeriod: 30
+        Tags: []
+        HasModifyEntriesAccess: true
+        HasViewEntryContentsAccess: true
+        CommentPrompts:
+          AskForCommentOnViewPassword: false
+          AskForCommentOnViewOffline: false
+          AskForCommentOnModifyEntries: false
+          AskForCommentOnMoveEntries: false
+          AskForCommentOnMoveFolders: false
+          AskForCommentOnModifyFolders: false
+        Id: 0d592c23-799c-449c-b4af-e367c5fae80b
+        Name: ""
+        ParentId: 9fcb85ef-e156-4a16-ae53-0420a40d066d
+        Notes: ""
+        Created: 2023-08-16T08:53:25.000Z
+        Modified: 2023-08-16T12:40:17.000Z
+      properties:
+        CustomUserFields:
+          description: ""
+          type: object
+        CustomApplicationFields:
+          description: ""
+          type: object
+        Children:
+          items:
+            $ref: '#/components/schemas/v6CredentialGroupOutput'
+          type: array
+        Credentials:
+          items:
+            $ref: '#/components/schemas/v6CredentialResult'
+          readOnly: false
+          type: array
+        Tags:
+          items:
+            $ref: '#/components/schemas/v6TagResult'
+          type: array
+        HasModifyEntriesAccess:
+          type: boolean
+        HasViewEntryContentsAccess:
+          type: boolean
+        CommentPrompts:
+          $ref: '#/components/schemas/v6CommentPromptResult'
+        Id:
+          type: string
+        Name:
+          type: string
+        ParentId:
+          type: string
+        Notes:
+          type: string
+        Created:
+          format: date-time
+          type: string
+        Modified:
+          format: date-time
+          type: string
+        Expires:
+          type: string
+      title: Root Type for CredentialGroupOutput
+      type: object
+    v6CredentialGroupInput:
+      description: ""
+      example:
+        CustomUserFields: {}
+        CustomApplicationFields:
+          IconId: "48"
+        Children: []
+        Credentials:
+        - CustomUserFields: {}
+          CustomApplicationFields: {}
+          Attachments: []
+          Tags: []
+          HasModifyEntriesAccess: true
+          HasViewEntryContentsAccess: true
+          HasViewEntryPasswordAccess: true
+          HasViewTOTPAccess: true
+          HasModifyTOTPAccess: true
+          CommentPrompts:
+            AskForCommentOnViewPassword: false
+            AskForCommentOnViewOffline: false
+            AskForCommentOnModifyEntries: false
+            AskForCommentOnMoveEntries: false
+            AskForCommentOnMoveFolders: false
+            AskForCommentOnModifyFolders: false
+          Id: 83ba66d6-9470-4bb8-b690-0ef04ae0cc00
+          Name: postgressql
+          Username: ""
+          Url: ""
+          Notes: ""
+          GroupId: 0d592c23-799c-449c-b4af-e367c5fae80b
+          Created: 2023-10-04T08:36:34.000Z
+          Modified: 2023-10-04T08:36:34.000Z
+          TOTPDigits: 6
+          TOTPPeriod: 30
+        - CustomUserFields: {}
+          CustomApplicationFields:
+            IconId: "0"
+          Attachments: []
+          Tags:
+          - Name: ""
+          HasModifyEntriesAccess: true
+          HasViewEntryContentsAccess: true
+          HasViewEntryPasswordAccess: true
+          HasViewTOTPAccess: true
+          HasModifyTOTPAccess: true
+          CommentPrompts:
+            AskForCommentOnViewPassword: false
+            AskForCommentOnViewOffline: false
+            AskForCommentOnModifyEntries: false
+            AskForCommentOnMoveEntries: false
+            AskForCommentOnMoveFolders: false
+            AskForCommentOnModifyFolders: false
+          Id: 60ba37f3-4573-4f27-ae83-837a982d9fab
+          Name: ssh
+          Username: ""
+          Url: ""
+          Notes: ""
+          GroupId: 0d592c23-799c-449c-b4af-e367c5fae80b
+          Created: 2023-08-16T08:53:26.000Z
+          Modified: 2023-08-16T08:53:26.000Z
+          TOTPIssuer: ""
+          TOTPDigits: 6
+          TOTPPeriod: 30
+        Tags: []
+        HasModifyEntriesAccess: true
+        HasViewEntryContentsAccess: true
+        CommentPrompts:
+          AskForCommentOnViewPassword: false
+          AskForCommentOnViewOffline: false
+          AskForCommentOnModifyEntries: false
+          AskForCommentOnMoveEntries: false
+          AskForCommentOnMoveFolders: false
+          AskForCommentOnModifyFolders: false
+        Id: 0d592c23-799c-449c-b4af-e367c5fae80b
+        Name: ""
+        ParentId: 9fcb85ef-e156-4a16-ae53-0420a40d066d
+        Notes: ""
+        Created: 2023-08-16T08:53:25.000Z
+        Modified: 2023-08-16T12:40:17.000Z
+      properties:
+        CustomUserFields:
+          description: ""
+          type: object
+        Tags:
+          items:
+            $ref: '#/components/schemas/v6TagResult'
+          type: array
+        Id:
+          type: string
+        Name:
+          type: string
+        ParentId:
+          type: string
+        Notes:
+          type: string
+        Expires:
+          type: string
+      title: Root Type for CredentialGroupOutput
+      type: object
+    Delete_Action:
+      description: ""
+      example:
+        Action: Archive
+        Comment: Usage Comment
+      properties:
+        Action:
+          enum:
+          - Archive
+          - Delete
+          type: string
+        Comment:
+          type: string
+      title: Root Type for Delete_Action
       type: object
   securitySchemes:
     Bearer_token:

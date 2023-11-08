@@ -78,20 +78,25 @@ All URIs are relative to *http://localhost*
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
 *AuthenticationAPI* | [**PostOauthToken**](docs/AuthenticationAPI.md#postoauthtoken) | **Post** /OAuth2/Token | 
+*DefaultAPI* | [**ApiV6RestFoldersIdDelete**](docs/DefaultAPI.md#apiv6restfoldersiddelete) | **Delete** /api/v6/rest/folders/{id} | 
 *DefaultAPI* | [**GetV6CredentialsByID**](docs/DefaultAPI.md#getv6credentialsbyid) | **Get** /api/v6/rest/entries/{id} | get_entry
+*DefaultAPI* | [**GetV6Folders**](docs/DefaultAPI.md#getv6folders) | **Get** /api/v6/rest/folders | 
 *DefaultAPI* | [**GetV6FoldersByID**](docs/DefaultAPI.md#getv6foldersbyid) | **Get** /api/v6/rest/folders/{id} | 
 *DefaultAPI* | [**GetV6ServerInfo**](docs/DefaultAPI.md#getv6serverinfo) | **Get** /api/v6/rest/getserverinfo | 
+*DefaultAPI* | [**PostV6Folders**](docs/DefaultAPI.md#postv6folders) | **Post** /api/v6/rest/folders | Create New Folder
 *DefaultAPI* | [**PostV6Search**](docs/DefaultAPI.md#postv6search) | **Post** /api/v6/rest/search | 
 
 
 ## Documentation For Models
 
+ - [DeleteAction](docs/DeleteAction.md)
  - [GenericError](docs/GenericError.md)
  - [NotFoundError](docs/NotFoundError.md)
  - [Oauth2TokenInput](docs/Oauth2TokenInput.md)
  - [Oauth2TokenOutput](docs/Oauth2TokenOutput.md)
  - [V6AttachmentResult](docs/V6AttachmentResult.md)
  - [V6CommentPromptResult](docs/V6CommentPromptResult.md)
+ - [V6CredentialGroupInput](docs/V6CredentialGroupInput.md)
  - [V6CredentialGroupOutput](docs/V6CredentialGroupOutput.md)
  - [V6CredentialGroupSearchResult](docs/V6CredentialGroupSearchResult.md)
  - [V6CredentialResult](docs/V6CredentialResult.md)
