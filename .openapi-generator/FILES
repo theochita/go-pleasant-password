@@ -18,6 +18,7 @@ docs/V6CommentPromptResult.md
 docs/V6CredentialGroupInput.md
 docs/V6CredentialGroupOutput.md
 docs/V6CredentialGroupSearchResult.md
+docs/V6CredentialInput.md
 docs/V6CredentialResult.md
 docs/V6CredentialSearchResult.md
 docs/V6SearchInput.md
@@ -38,6 +39,7 @@ model_v6_comment_prompt_result.go
 model_v6_credential_group_input.go
 model_v6_credential_group_output.go
 model_v6_credential_group_search_result.go
+model_v6_credential_input.go
 model_v6_credential_result.go
 model_v6_credential_search_result.go
 model_v6_search_input.go

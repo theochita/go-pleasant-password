@@ -23,32 +23,25 @@ import (
 // DefaultAPIService DefaultAPI service
 type DefaultAPIService service
 
-type ApiApiV6RestFoldersIdDeleteRequest struct {
+type ApiDeleteV6CredentialsByIDRequest struct {
 	ctx context.Context
 	ApiService *DefaultAPIService
 	id string
-	deleteAction *DeleteAction
 }
 
-// Delete or archive  folder
-func (r ApiApiV6RestFoldersIdDeleteRequest) DeleteAction(deleteAction DeleteAction) ApiApiV6RestFoldersIdDeleteRequest {
-	r.deleteAction = &deleteAction
-	return r
-}
-
-func (r ApiApiV6RestFoldersIdDeleteRequest) Execute() (*http.Response, error) {
-	return r.ApiService.ApiV6RestFoldersIdDeleteExecute(r)
+func (r ApiDeleteV6CredentialsByIDRequest) Execute() (*http.Response, error) {
+	return r.ApiService.DeleteV6CredentialsByIDExecute(r)
 }
 
 /*
-ApiV6RestFoldersIdDelete Method for ApiV6RestFoldersIdDelete
+DeleteV6CredentialsByID Method for DeleteV6CredentialsByID
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @param id
- @return ApiApiV6RestFoldersIdDeleteRequest
+ @return ApiDeleteV6CredentialsByIDRequest
 */
-func (a *DefaultAPIService) ApiV6RestFoldersIdDelete(ctx context.Context, id string) ApiApiV6RestFoldersIdDeleteRequest {
-	return ApiApiV6RestFoldersIdDeleteRequest{
+func (a *DefaultAPIService) DeleteV6CredentialsByID(ctx context.Context, id string) ApiDeleteV6CredentialsByIDRequest {
+	return ApiDeleteV6CredentialsByIDRequest{
 		ApiService: a,
 		ctx: ctx,
 		id: id,
@@ -56,30 +49,27 @@ func (a *DefaultAPIService) ApiV6RestFoldersIdDelete(ctx context.Context, id str
 }
 
 // Execute executes the request
-func (a *DefaultAPIService) ApiV6RestFoldersIdDeleteExecute(r ApiApiV6RestFoldersIdDeleteRequest) (*http.Response, error) {
+func (a *DefaultAPIService) DeleteV6CredentialsByIDExecute(r ApiDeleteV6CredentialsByIDRequest) (*http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodDelete
 		localVarPostBody     interface{}
 		formFiles            []formFile
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultAPIService.ApiV6RestFoldersIdDelete")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultAPIService.DeleteV6CredentialsByID")
 	if err != nil {
 		return nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/api/v6/rest/folders/{id}"
+	localVarPath := localBasePath + "/api/v6/rest/entries/{id}"
 	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
-	if r.deleteAction == nil {
-		return nil, reportError("deleteAction is required and must be specified")
-	}
 
 	// to determine the Content-Type header
-	localVarHTTPContentTypes := []string{"application/json"}
+	localVarHTTPContentTypes := []string{}
 
 	// set Content-Type header
 	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
@@ -88,15 +78,13 @@ func (a *DefaultAPIService) ApiV6RestFoldersIdDeleteExecute(r ApiApiV6RestFolder
 	}
 
 	// to determine the Accept header
-	localVarHTTPHeaderAccepts := []string{}
+	localVarHTTPHeaderAccepts := []string{"application/json"}
 
 	// set Accept header
 	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
 	if localVarHTTPHeaderAccept != "" {
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
-	// body params
-	localVarPostBody = r.deleteAction
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return nil, err
@@ -119,10 +107,253 @@ func (a *DefaultAPIService) ApiV6RestFoldersIdDeleteExecute(r ApiApiV6RestFolder
 			body:  localVarBody,
 			error: localVarHTTPResponse.Status,
 		}
+		if localVarHTTPResponse.StatusCode == 403 {
+			var v NotFoundError
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+		}
 		return localVarHTTPResponse, newErr
 	}
 
 	return localVarHTTPResponse, nil
+}
+
+type ApiDeleteV6FoldersByIDRequest struct {
+	ctx context.Context
+	ApiService *DefaultAPIService
+	id string
+}
+
+func (r ApiDeleteV6FoldersByIDRequest) Execute() (*http.Response, error) {
+	return r.ApiService.DeleteV6FoldersByIDExecute(r)
+}
+
+/*
+DeleteV6FoldersByID Method for DeleteV6FoldersByID
+
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param id
+ @return ApiDeleteV6FoldersByIDRequest
+*/
+func (a *DefaultAPIService) DeleteV6FoldersByID(ctx context.Context, id string) ApiDeleteV6FoldersByIDRequest {
+	return ApiDeleteV6FoldersByIDRequest{
+		ApiService: a,
+		ctx: ctx,
+		id: id,
+	}
+}
+
+// Execute executes the request
+func (a *DefaultAPIService) DeleteV6FoldersByIDExecute(r ApiDeleteV6FoldersByIDRequest) (*http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodDelete
+		localVarPostBody     interface{}
+		formFiles            []formFile
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultAPIService.DeleteV6FoldersByID")
+	if err != nil {
+		return nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/api/v6/rest/folders/{id}"
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		if localVarHTTPResponse.StatusCode == 403 {
+			var v NotFoundError
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+		}
+		return localVarHTTPResponse, newErr
+	}
+
+	return localVarHTTPResponse, nil
+}
+
+type ApiGetV6CredentialPasswordByIDRequest struct {
+	ctx context.Context
+	ApiService *DefaultAPIService
+	id string
+}
+
+func (r ApiGetV6CredentialPasswordByIDRequest) Execute() (string, *http.Response, error) {
+	return r.ApiService.GetV6CredentialPasswordByIDExecute(r)
+}
+
+/*
+GetV6CredentialPasswordByID get_entry
+
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param id
+ @return ApiGetV6CredentialPasswordByIDRequest
+*/
+func (a *DefaultAPIService) GetV6CredentialPasswordByID(ctx context.Context, id string) ApiGetV6CredentialPasswordByIDRequest {
+	return ApiGetV6CredentialPasswordByIDRequest{
+		ApiService: a,
+		ctx: ctx,
+		id: id,
+	}
+}
+
+// Execute executes the request
+//  @return string
+func (a *DefaultAPIService) GetV6CredentialPasswordByIDExecute(r ApiGetV6CredentialPasswordByIDRequest) (string, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodGet
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  string
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultAPIService.GetV6CredentialPasswordByID")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/api/v6/rest/entries/{id}/password"
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		if localVarHTTPResponse.StatusCode == 400 {
+			var v NotFoundError
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
+		if localVarHTTPResponse.StatusCode == 404 {
+			var v NotFoundError
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
+		if localVarHTTPResponse.StatusCode == 500 {
+			var v GenericError
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
 type ApiGetV6CredentialsByIDRequest struct {
@@ -478,6 +709,105 @@ func (a *DefaultAPIService) GetV6FoldersByIDExecute(r ApiGetV6FoldersByIDRequest
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
+type ApiGetV6FoldersRootRequest struct {
+	ctx context.Context
+	ApiService *DefaultAPIService
+}
+
+func (r ApiGetV6FoldersRootRequest) Execute() (string, *http.Response, error) {
+	return r.ApiService.GetV6FoldersRootExecute(r)
+}
+
+/*
+GetV6FoldersRoot Method for GetV6FoldersRoot
+
+Get all the root folder id as a raw string
+
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @return ApiGetV6FoldersRootRequest
+*/
+func (a *DefaultAPIService) GetV6FoldersRoot(ctx context.Context) ApiGetV6FoldersRootRequest {
+	return ApiGetV6FoldersRootRequest{
+		ApiService: a,
+		ctx: ctx,
+	}
+}
+
+// Execute executes the request
+//  @return string
+func (a *DefaultAPIService) GetV6FoldersRootExecute(r ApiGetV6FoldersRootRequest) (string, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodGet
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  string
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultAPIService.GetV6FoldersRoot")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/api/v6/rest/folders/root"
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
 type ApiGetV6ServerInfoRequest struct {
 	ctx context.Context
 	ApiService *DefaultAPIService
@@ -585,54 +915,58 @@ func (a *DefaultAPIService) GetV6ServerInfoExecute(r ApiGetV6ServerInfoRequest) 
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiPostV6FoldersRequest struct {
+type ApiPatchV6CredentialsByIDRequest struct {
 	ctx context.Context
 	ApiService *DefaultAPIService
-	v6CredentialGroupOutput *V6CredentialGroupOutput
+	id string
+	v6CredentialInput *V6CredentialInput
 }
 
-func (r ApiPostV6FoldersRequest) V6CredentialGroupOutput(v6CredentialGroupOutput V6CredentialGroupOutput) ApiPostV6FoldersRequest {
-	r.v6CredentialGroupOutput = &v6CredentialGroupOutput
+func (r ApiPatchV6CredentialsByIDRequest) V6CredentialInput(v6CredentialInput V6CredentialInput) ApiPatchV6CredentialsByIDRequest {
+	r.v6CredentialInput = &v6CredentialInput
 	return r
 }
 
-func (r ApiPostV6FoldersRequest) Execute() (*http.Response, error) {
-	return r.ApiService.PostV6FoldersExecute(r)
+func (r ApiPatchV6CredentialsByIDRequest) Execute() (*http.Response, error) {
+	return r.ApiService.PatchV6CredentialsByIDExecute(r)
 }
 
 /*
-PostV6Folders Create New Folder
+PatchV6CredentialsByID Method for PatchV6CredentialsByID
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiPostV6FoldersRequest
+ @param id
+ @return ApiPatchV6CredentialsByIDRequest
 */
-func (a *DefaultAPIService) PostV6Folders(ctx context.Context) ApiPostV6FoldersRequest {
-	return ApiPostV6FoldersRequest{
+func (a *DefaultAPIService) PatchV6CredentialsByID(ctx context.Context, id string) ApiPatchV6CredentialsByIDRequest {
+	return ApiPatchV6CredentialsByIDRequest{
 		ApiService: a,
 		ctx: ctx,
+		id: id,
 	}
 }
 
 // Execute executes the request
-func (a *DefaultAPIService) PostV6FoldersExecute(r ApiPostV6FoldersRequest) (*http.Response, error) {
+func (a *DefaultAPIService) PatchV6CredentialsByIDExecute(r ApiPatchV6CredentialsByIDRequest) (*http.Response, error) {
 	var (
-		localVarHTTPMethod   = http.MethodPost
+		localVarHTTPMethod   = http.MethodPatch
 		localVarPostBody     interface{}
 		formFiles            []formFile
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultAPIService.PostV6Folders")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultAPIService.PatchV6CredentialsByID")
 	if err != nil {
 		return nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/api/v6/rest/folders"
+	localVarPath := localBasePath + "/api/v6/rest/entries/{id}"
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
-	if r.v6CredentialGroupOutput == nil {
-		return nil, reportError("v6CredentialGroupOutput is required and must be specified")
+	if r.v6CredentialInput == nil {
+		return nil, reportError("v6CredentialInput is required and must be specified")
 	}
 
 	// to determine the Content-Type header
@@ -653,7 +987,7 @@ func (a *DefaultAPIService) PostV6FoldersExecute(r ApiPostV6FoldersRequest) (*ht
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	// body params
-	localVarPostBody = r.v6CredentialGroupOutput
+	localVarPostBody = r.v6CredentialInput
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return nil, err
@@ -676,7 +1010,7 @@ func (a *DefaultAPIService) PostV6FoldersExecute(r ApiPostV6FoldersRequest) (*ht
 			body:  localVarBody,
 			error: localVarHTTPResponse.Status,
 		}
-		if localVarHTTPResponse.StatusCode == 400 {
+		if localVarHTTPResponse.StatusCode == 403 {
 			var v NotFoundError
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 			if err != nil {
@@ -690,6 +1024,344 @@ func (a *DefaultAPIService) PostV6FoldersExecute(r ApiPostV6FoldersRequest) (*ht
 	}
 
 	return localVarHTTPResponse, nil
+}
+
+type ApiPatchV6FoldersByIDRequest struct {
+	ctx context.Context
+	ApiService *DefaultAPIService
+	id string
+	v6CredentialGroupInput *V6CredentialGroupInput
+}
+
+func (r ApiPatchV6FoldersByIDRequest) V6CredentialGroupInput(v6CredentialGroupInput V6CredentialGroupInput) ApiPatchV6FoldersByIDRequest {
+	r.v6CredentialGroupInput = &v6CredentialGroupInput
+	return r
+}
+
+func (r ApiPatchV6FoldersByIDRequest) Execute() (*http.Response, error) {
+	return r.ApiService.PatchV6FoldersByIDExecute(r)
+}
+
+/*
+PatchV6FoldersByID Method for PatchV6FoldersByID
+
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param id
+ @return ApiPatchV6FoldersByIDRequest
+*/
+func (a *DefaultAPIService) PatchV6FoldersByID(ctx context.Context, id string) ApiPatchV6FoldersByIDRequest {
+	return ApiPatchV6FoldersByIDRequest{
+		ApiService: a,
+		ctx: ctx,
+		id: id,
+	}
+}
+
+// Execute executes the request
+func (a *DefaultAPIService) PatchV6FoldersByIDExecute(r ApiPatchV6FoldersByIDRequest) (*http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodPatch
+		localVarPostBody     interface{}
+		formFiles            []formFile
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultAPIService.PatchV6FoldersByID")
+	if err != nil {
+		return nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/api/v6/rest/folders/{id}"
+	localVarPath = strings.Replace(localVarPath, "{"+"id"+"}", url.PathEscape(parameterValueToString(r.id, "id")), -1)
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+	if r.v6CredentialGroupInput == nil {
+		return nil, reportError("v6CredentialGroupInput is required and must be specified")
+	}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{"application/json"}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	// body params
+	localVarPostBody = r.v6CredentialGroupInput
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		return localVarHTTPResponse, newErr
+	}
+
+	return localVarHTTPResponse, nil
+}
+
+type ApiPostV6CredentialsRequest struct {
+	ctx context.Context
+	ApiService *DefaultAPIService
+	v6CredentialInput *V6CredentialInput
+}
+
+// Create Credential
+func (r ApiPostV6CredentialsRequest) V6CredentialInput(v6CredentialInput V6CredentialInput) ApiPostV6CredentialsRequest {
+	r.v6CredentialInput = &v6CredentialInput
+	return r
+}
+
+func (r ApiPostV6CredentialsRequest) Execute() (string, *http.Response, error) {
+	return r.ApiService.PostV6CredentialsExecute(r)
+}
+
+/*
+PostV6Credentials Method for PostV6Credentials
+
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @return ApiPostV6CredentialsRequest
+*/
+func (a *DefaultAPIService) PostV6Credentials(ctx context.Context) ApiPostV6CredentialsRequest {
+	return ApiPostV6CredentialsRequest{
+		ApiService: a,
+		ctx: ctx,
+	}
+}
+
+// Execute executes the request
+//  @return string
+func (a *DefaultAPIService) PostV6CredentialsExecute(r ApiPostV6CredentialsRequest) (string, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  string
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultAPIService.PostV6Credentials")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/api/v6/rest/entries"
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+	if r.v6CredentialInput == nil {
+		return localVarReturnValue, nil, reportError("v6CredentialInput is required and must be specified")
+	}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{"application/json"}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	// body params
+	localVarPostBody = r.v6CredentialInput
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		if localVarHTTPResponse.StatusCode == 400 {
+			var v NotFoundError
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
+type ApiPostV6FoldersRequest struct {
+	ctx context.Context
+	ApiService *DefaultAPIService
+	v6CredentialGroupInput *V6CredentialGroupInput
+}
+
+func (r ApiPostV6FoldersRequest) V6CredentialGroupInput(v6CredentialGroupInput V6CredentialGroupInput) ApiPostV6FoldersRequest {
+	r.v6CredentialGroupInput = &v6CredentialGroupInput
+	return r
+}
+
+func (r ApiPostV6FoldersRequest) Execute() (string, *http.Response, error) {
+	return r.ApiService.PostV6FoldersExecute(r)
+}
+
+/*
+PostV6Folders Create New Folder
+
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @return ApiPostV6FoldersRequest
+*/
+func (a *DefaultAPIService) PostV6Folders(ctx context.Context) ApiPostV6FoldersRequest {
+	return ApiPostV6FoldersRequest{
+		ApiService: a,
+		ctx: ctx,
+	}
+}
+
+// Execute executes the request
+//  @return string
+func (a *DefaultAPIService) PostV6FoldersExecute(r ApiPostV6FoldersRequest) (string, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  string
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultAPIService.PostV6Folders")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/api/v6/rest/folders"
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+	if r.v6CredentialGroupInput == nil {
+		return localVarReturnValue, nil, reportError("v6CredentialGroupInput is required and must be specified")
+	}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{"application/json"}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	// body params
+	localVarPostBody = r.v6CredentialGroupInput
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		if localVarHTTPResponse.StatusCode == 400 {
+			var v NotFoundError
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+					newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+					newErr.model = v
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
 type ApiPostV6SearchRequest struct {

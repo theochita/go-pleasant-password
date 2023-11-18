@@ -15,6 +15,27 @@ tags:
   name: Bearer
 paths:
   /api/v6/rest/entries/{id}:
+    delete:
+      operationId: DeleteV6CredentialsByID
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "204":
+          description: Return only HTTP 204 if it was successful
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: not found
+      security:
+      - Bearer_token: []
     get:
       operationId: GetV6CredentialsByID
       parameters:
@@ -53,8 +74,8 @@ paths:
       security:
       - Bearer_token: []
       summary: get_entry
-  /api/v6/rest/folders/{id}:
-    delete:
+    patch:
+      operationId: PatchV6CredentialsByID
       parameters:
       - explode: false
         in: path
@@ -67,12 +88,39 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Delete_Action'
-        description: Delete or archive  folder
+              $ref: '#/components/schemas/v6CredentialInput'
         required: true
       responses:
         "204":
+          description: Returns only http 204 if patch successfully
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: not found
+  /api/v6/rest/folders/{id}:
+    delete:
+      operationId: DeleteV6FoldersByID
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "204":
           description: Delete or Archive successful
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: not found
+      security:
+      - Bearer_token: []
     get:
       operationId: GetV6FoldersByID
       parameters:
@@ -98,6 +146,25 @@ paths:
           description: not found
       security:
       - Bearer_token: []
+    patch:
+      operationId: PatchV6FoldersByID
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/v6CredentialGroupInput'
+        required: true
+      responses:
+        "204":
+          description: 'Successfully updated '
   /api/v6/rest/search:
     post:
       operationId: PostV6Search
@@ -211,13 +278,15 @@ paths:
               schema:
                 $ref: '#/components/schemas/NotFoundError'
           description: not found
+      security:
+      - Bearer_token: []
     post:
       operationId: PostV6Folders
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/v6CredentialGroupOutput'
+              $ref: '#/components/schemas/v6CredentialGroupInput'
         required: true
       responses:
         "200":
@@ -226,6 +295,8 @@ paths:
               examples:
                 "200 OK":
                   value: '"a5bc41a3-0aa5-4e6a-83f4-ae61063e875c"'
+              schema:
+                type: string
           description: Returns only raw guid string
         "400":
           content:
@@ -236,6 +307,86 @@ paths:
       security:
       - Bearer_token: []
       summary: Create New Folder
+  /api/v6/rest/folders/root:
+    get:
+      description: Get all the root folder id as a raw string
+      operationId: GetV6FoldersRoot
+      responses:
+        "200":
+          content:
+            application/json:
+              examples:
+                root:
+                  value: '"77549e64-39ab-4bc7-b95f-b0b9012fe943"'
+              schema:
+                type: string
+          description: Returns all folders inside the root folder.
+      security:
+      - Bearer_token: []
+  /api/v6/rest/entries:
+    post:
+      operationId: PostV6Credentials
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/v6CredentialInput'
+        description: Create Credential
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: Returns the Id of the created credential
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: not found
+      security:
+      - Bearer_token: []
+  /api/v6/rest/entries/{id}/password:
+    get:
+      operationId: GetV6CredentialPasswordByID
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: Returns a Credential
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: Not found
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+          description: not found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericError'
+          description: Internal server error
+      security:
+      - Bearer_token: []
+      summary: get_entry
 components:
   responses:
     NotFoundError:
@@ -836,6 +987,44 @@ components:
         Comment:
           type: string
       title: Root Type for Delete_Action
+      type: object
+    v6CredentialInput:
+      description: ""
+      example: |-
+        {
+            "CustomUserFields": {},
+            "Attachments": [],
+            "Tags": [],
+            "Name": "",
+            "Username": "",
+            "Url": "",
+            "Notes": "",
+            "GroupId": "0d592c23-799c-449c-b4af-e367c5fae80b",
+
+        }
+      properties:
+        CustomUserFields:
+          description: ""
+          type: object
+        Tags:
+          items:
+            $ref: '#/components/schemas/v6TagResult'
+          type: array
+        Name:
+          type: string
+        Username:
+          type: string
+        Password:
+          type: string
+        Url:
+          type: string
+        Notes:
+          type: string
+        GroupId:
+          type: string
+        Expires:
+          type: string
+      title: Root Type for CredentialResult
       type: object
   securitySchemes:
     Bearer_token:

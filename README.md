@@ -78,11 +78,17 @@ All URIs are relative to *http://localhost*
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
 *AuthenticationAPI* | [**PostOauthToken**](docs/AuthenticationAPI.md#postoauthtoken) | **Post** /OAuth2/Token | 
-*DefaultAPI* | [**ApiV6RestFoldersIdDelete**](docs/DefaultAPI.md#apiv6restfoldersiddelete) | **Delete** /api/v6/rest/folders/{id} | 
+*DefaultAPI* | [**DeleteV6CredentialsByID**](docs/DefaultAPI.md#deletev6credentialsbyid) | **Delete** /api/v6/rest/entries/{id} | 
+*DefaultAPI* | [**DeleteV6FoldersByID**](docs/DefaultAPI.md#deletev6foldersbyid) | **Delete** /api/v6/rest/folders/{id} | 
+*DefaultAPI* | [**GetV6CredentialPasswordByID**](docs/DefaultAPI.md#getv6credentialpasswordbyid) | **Get** /api/v6/rest/entries/{id}/password | get_entry
 *DefaultAPI* | [**GetV6CredentialsByID**](docs/DefaultAPI.md#getv6credentialsbyid) | **Get** /api/v6/rest/entries/{id} | get_entry
 *DefaultAPI* | [**GetV6Folders**](docs/DefaultAPI.md#getv6folders) | **Get** /api/v6/rest/folders | 
 *DefaultAPI* | [**GetV6FoldersByID**](docs/DefaultAPI.md#getv6foldersbyid) | **Get** /api/v6/rest/folders/{id} | 
+*DefaultAPI* | [**GetV6FoldersRoot**](docs/DefaultAPI.md#getv6foldersroot) | **Get** /api/v6/rest/folders/root | 
 *DefaultAPI* | [**GetV6ServerInfo**](docs/DefaultAPI.md#getv6serverinfo) | **Get** /api/v6/rest/getserverinfo | 
+*DefaultAPI* | [**PatchV6CredentialsByID**](docs/DefaultAPI.md#patchv6credentialsbyid) | **Patch** /api/v6/rest/entries/{id} | 
+*DefaultAPI* | [**PatchV6FoldersByID**](docs/DefaultAPI.md#patchv6foldersbyid) | **Patch** /api/v6/rest/folders/{id} | 
+*DefaultAPI* | [**PostV6Credentials**](docs/DefaultAPI.md#postv6credentials) | **Post** /api/v6/rest/entries | 
 *DefaultAPI* | [**PostV6Folders**](docs/DefaultAPI.md#postv6folders) | **Post** /api/v6/rest/folders | Create New Folder
 *DefaultAPI* | [**PostV6Search**](docs/DefaultAPI.md#postv6search) | **Post** /api/v6/rest/search | 
 
@@ -99,6 +105,7 @@ Class | Method | HTTP request | Description
  - [V6CredentialGroupInput](docs/V6CredentialGroupInput.md)
  - [V6CredentialGroupOutput](docs/V6CredentialGroupOutput.md)
  - [V6CredentialGroupSearchResult](docs/V6CredentialGroupSearchResult.md)
+ - [V6CredentialInput](docs/V6CredentialInput.md)
  - [V6CredentialResult](docs/V6CredentialResult.md)
  - [V6CredentialSearchResult](docs/V6CredentialSearchResult.md)
  - [V6SearchInput](docs/V6SearchInput.md)
